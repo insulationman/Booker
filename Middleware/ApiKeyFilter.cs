@@ -1,11 +1,11 @@
 using System.Net;
 using Microsoft.Extensions.Options;
 
-public class IPFilter
+public class ApiKeyFilter
 {
     private readonly RequestDelegate _next;
     private readonly IConfiguration _configuration;
-    public IPFilter(RequestDelegate next, IConfiguration configuration)
+    public ApiKeyFilter(RequestDelegate next, IConfiguration configuration)
     {
         _next = next;
         _configuration = configuration;
@@ -13,10 +13,10 @@ public class IPFilter
 
     public async Task Invoke(HttpContext context)
     {
-        var ipAddress = context.Connection.RemoteIpAddress;
-        List<string>? whiteListIPList = _configuration.GetSection("IPWhitelist").Get<List<string>>();
+        var apiKey = context.Request.Headers["X-API-KEY"];
+        List<string>? accessSecrets = _configuration.GetSection("AccessSecrets").Get<List<string>>();
 
-        var isInwhiteListIPList = whiteListIPList != null && whiteListIPList.Any(ip => ip == ipAddress.ToString());
+        var isInwhiteListIPList = accessSecrets != null && accessSecrets.Any(ip => ip == apiKey);
         if (!isInwhiteListIPList)
         {
             context.Response.StatusCode = (int)HttpStatusCode.Forbidden;

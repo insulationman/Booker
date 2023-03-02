@@ -6,8 +6,30 @@ public class Booking : ITableEntity
 {
     public string? Comment { get; set; }
     public string? Name { get; set; }
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
+    private DateTime _start;
+    public DateTime Start
+    {
+        get
+        {
+            return DateTime.SpecifyKind(_start, DateTimeKind.Utc);
+        }
+        set
+        {
+            _start = value;
+        }
+    }
+    private DateTime _end;
+    public DateTime End
+    {
+        get
+        {
+            return DateTime.SpecifyKind(_end, DateTimeKind.Utc);
+        }
+        set
+        {
+            _end = value;
+        }
+    }
 
     //set partition key as year and month
     [JsonIgnore]

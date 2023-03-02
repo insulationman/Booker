@@ -4,4 +4,8 @@ public static class MiddlewareExtensions
     {
         return builder.UseMiddleware<IPFilter>();
     }
+    public static IApplicationBuilder UseApiKeyFilter(this IApplicationBuilder builder)
+    {
+        return builder.UseMiddleware<ApiKeyFilter>();
+    }
 }

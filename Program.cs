@@ -7,16 +7,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITableService, TableService>();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
-app.UseIPFilter();
+// app.UseIPFilter();
+app.UseApiKeyFilter();
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
 app.UseHttpsRedirection();
+
+app.UseCors(builder =>
+{
+    builder.AllowAnyOrigin();
+    builder.AllowAnyMethod();
+    builder.AllowAnyHeader();
+});
 
 
 app.MapGet("/bookings", async (int year, int month, [FromServices] ITableService tableService) =>
