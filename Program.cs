@@ -12,7 +12,6 @@ builder.Services.AddCors();
 var app = builder.Build();
 
 // app.UseIPFilter();
-app.UseApiKeyFilter();
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
@@ -25,6 +24,7 @@ app.UseCors(builder =>
     builder.AllowAnyMethod();
     builder.AllowAnyHeader();
 });
+app.UseApiKeyFilter();
 
 
 app.MapGet("/bookings", async (int year, int month, [FromServices] ITableService tableService) =>
